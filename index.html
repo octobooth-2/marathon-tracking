@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marathon Tracker</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Marathon Tracker</h1>
+      <p>Log training runs and track progress week by week.</p>
+    </header>
+
+    <main class="layout">
+      <section class="card" id="run-form-section">
+        <h2>Log a Run</h2>
+        <form id="run-form">
+          <input type="hidden" id="run-id" />
+          <div class="form-grid">
+            <label>
+              Date
+              <input type="date" id="run-date" required />
+            </label>
+            <label>
+              Distance
+              <div class="inline-field">
+                <input type="number" id="run-distance" min="0.1" step="0.1" required />
+                <select id="run-unit" aria-label="Distance unit">
+                  <option value="km">km</option>
+                  <option value="mi">mi</option>
+                </select>
+              </div>
+            </label>
+            <label>
+              Duration (minutes)
+              <input type="number" id="run-duration" min="1" step="1" required />
+            </label>
+            <label>
+              Effort (1-10)
+              <input type="number" id="run-effort" min="1" max="10" step="1" required />
+            </label>
+            <label class="full-width">
+              Notes
+              <textarea id="run-notes" rows="2" placeholder="How did the run feel?"></textarea>
+            </label>
+          </div>
+          <div class="actions">
+            <button type="submit" id="save-run-btn">Save Run</button>
+            <button type="button" id="cancel-edit-btn" class="secondary" hidden>Cancel Edit</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" id="dashboard-section">
+        <h2>Dashboard</h2>
+        <div class="stats-grid">
+          <article class="stat"><span>Total Distance</span><strong id="stat-total-distance">0 km</strong></article>
+          <article class="stat"><span>Longest Run</span><strong id="stat-longest-run">0 km</strong></article>
+          <article class="stat"><span>Average Pace</span><strong id="stat-average-pace">0:00 /km</strong></article>
+        </div>
+        <canvas id="weekly-mileage-chart" aria-label="Weekly mileage bar chart"></canvas>
+      </section>
+
+      <section class="card" id="history-section">
+        <h2>Run History</h2>
+        <div class="toolbar">
+          <label>
+            Filter text
+            <input type="search" id="history-filter" placeholder="Search notes or date" />
+          </label>
+          <label>
+            Sort by
+            <select id="history-sort">
+              <option value="date-desc">Date (newest)</option>
+              <option value="date-asc">Date (oldest)</option>
+              <option value="distance-desc">Distance (high to low)</option>
+              <option value="distance-asc">Distance (low to high)</option>
+              <option value="duration-asc">Duration (short to long)</option>
+              <option value="duration-desc">Duration (long to short)</option>
+            </select>
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Distance</th>
+                <th>Duration</th>
+                <th>Pace</th>
+                <th>Effort</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="run-history-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" id="training-plan-section">
+        <h2>Training Plan (Weekly Target vs Actual)</h2>
+        <p class="muted">Set your weekly target in km. Actual is calculated from logged runs.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Week Start</th>
+                <th>Target (km)</th>
+                <th>Actual (km)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="training-plan-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" id="backup-section">
+        <h2>Export / Import</h2>
+        <div class="actions">
+          <button type="button" id="export-btn">Export JSON</button>
+          <label class="file-label" for="import-file">Import JSON</label>
+          <input type="file" id="import-file" accept="application/json" />
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
